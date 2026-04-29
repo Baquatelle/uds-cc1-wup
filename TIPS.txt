@@ -1,0 +1,45 @@
+TIPS FOR DEPLOYING ON PYTHONANYWHERE
+=====================================
+
+Setting up the WSGI configuration
+----------------------------------
+After creating a web app on PythonAnywhere, you need to edit the WSGI
+configuration file. You can find it linked from the Web tab in the
+PythonAnywhere dashboard.
+
+Replace the entire contents of the WSGI configuration file with the
+following block, substituting the path string with the folder where
+you have cloned the repository:
+
+    import os
+    import sys
+
+    path = '/home/YourUsername/wup'
+    if path not in sys.path:
+        sys.path.append(path)
+
+    os.environ['DJANGO_SETTINGS_MODULE'] = 'wup.settings'
+
+    from django.core.wsgi import get_wsgi_application
+    application = get_wsgi_application()
+
+After saving the file, click the Reload button on the Web tab to apply
+the changes.
+
+
+Updating ALLOWED_HOSTS
+-----------------------
+In wup/settings.py, make sure your PythonAnywhere domain is listed in
+ALLOWED_HOSTS, otherwise Django will reject all incoming requests:
+
+    ALLOWED_HOSTS = ['yourusername.pythonanywhere.com']
+
+
+Pulling updates from GitHub
+----------------------------
+Whenever you push new changes to GitHub, SSH into PythonAnywhere,
+navigate to your project folder, and run:
+
+    git pull
+
+Then reload the web app from the dashboard for the changes to take effect.
